@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 import org.apache.flink.api.common.RuntimeExecutionMode;
+import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.api.common.typeinfo.BasicTypeInfo;
 import org.apache.flink.streaming.api.datastream.DataStream;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
@@ -87,6 +88,8 @@ class InfluxDBSinkIntegrationTestCase extends TestLogger {
                         .build();
 
         env.addSource(new FiniteTestSource<>(SOURCE_DATA), BasicTypeInfo.LONG_TYPE_INFO)
+                .assignTimestampsAndWatermarks(WatermarkStrategy.<Long>noWatermarks()
+                        .withTimestampAssigner((event, timestamp) -> System.nanoTime()))
                 .sinkTo(influxDBSink);
 
         env.execute();

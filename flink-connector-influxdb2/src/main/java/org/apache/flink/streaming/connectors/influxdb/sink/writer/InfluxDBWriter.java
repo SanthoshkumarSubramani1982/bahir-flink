@@ -78,18 +78,17 @@ public final class InfluxDBWriter<IN> implements SinkWriter<IN, Long, Point> {
      * @param context current Flink context
      * @see org.apache.flink.api.connector.sink.SinkWriter.Context
      */
-    @Override
     public void write(final IN in, final Context context) throws IOException {
         if (this.elements.size() == this.bufferSize) {
             LOG.debug("Buffer size reached preparing to write the elements.");
             this.writeCurrentElements();
             this.elements.clear();
-        } else {
-            LOG.trace("Adding elements to buffer. Buffer size: {}", this.elements.size());
-            this.elements.add(this.schemaSerializer.serialize(in, context));
-            if (context.timestamp() != null) {
-                this.lastTimestamp = Math.max(this.lastTimestamp, context.timestamp());
-            }
+        }
+
+        LOG.trace("Adding elements to buffer. Buffer size: {}", this.elements.size());
+        this.elements.add(this.schemaSerializer.serialize(in, context));
+        if (context.timestamp() != null) {
+            this.lastTimestamp = Math.max(this.lastTimestamp, context.timestamp());
         }
     }
 

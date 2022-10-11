@@ -28,9 +28,10 @@ jobs:
 
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
-       java: ['8', '11']
-       flink-version: ['1.15.1']
+       java: ['8']
+       flink-version: ['1.15.2']
        scala-version: ['2.12']
        connector: [
          'flink-connector-activemq',
@@ -46,12 +47,12 @@ jobs:
        ]
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Set up JDK ${{ matrix.java }}
-      uses: actions/setup-java@v2
+      uses: actions/setup-java@v3
       with:
         java-version: ${{ matrix.java }}
-        distribution: 'adopt'
+        distribution: 'zulu'
         cache: maven 
 #    - name: Change scala version to ${{ matrix.scala-version }}
 #      run: ./dev/change-scala-version.sh ${{ matrix.scala-version }}

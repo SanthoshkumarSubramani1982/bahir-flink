@@ -102,6 +102,7 @@ public class PinotSinkWriter<IN> implements SinkWriter<IN, PinotSinkCommittable,
      */
     @Override
     public List<PinotSinkCommittable> prepareCommit(boolean flush) throws IOException {
+        if (activeSegments.isEmpty()) return Collections.emptyList();
         // Identify segments to commit. If the flush argument is set all segments shall be committed.
         // Otherwise, take only those PinotWriterSegments that do not accept any more elements.
         List<PinotWriterSegment<IN>> segmentsToCommit = activeSegments.stream()

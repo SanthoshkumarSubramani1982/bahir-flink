@@ -16,11 +16,13 @@
  * limitations under the License.
  */
 
-package org.apache.flink.streaming.connectors.pinot;
+package org.apache.flink.streaming.connectors.pinot.v2;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
-import org.apache.flink.streaming.connectors.pinot.external.JsonSerializer;
+import org.apache.flink.streaming.connectors.pinot.PinotSink;
+import org.apache.flink.streaming.connectors.pinot.PinotTestHelper;
+import org.apache.flink.streaming.connectors.pinot.v2.external.JsonSerializer;
 import org.apache.flink.util.TestLogger;
 import org.apache.pinot.spi.config.table.*;
 import org.apache.pinot.spi.data.DimensionFieldSpec;
@@ -33,7 +35,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.wait.strategy.HttpWaitStrategy;
-import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 
@@ -177,6 +178,14 @@ public class PinotTestBase extends TestLogger {
 
         public void setTimestamp(Long timestamp) {
             this._timestamp = timestamp;
+        }
+
+        @Override
+        public String toString() {
+            return "SingleColumnTableRow{" +
+                    "_col1='" + _col1 + '\'' +
+                    ", _timestamp=" + _timestamp +
+                    '}';
         }
     }
 

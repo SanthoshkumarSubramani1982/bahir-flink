@@ -39,10 +39,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.*;
 
 import static org.apache.flink.util.Preconditions.checkArgument;
@@ -178,6 +175,8 @@ public class PinotSinkGlobalCommitter implements GlobalCommitter<PinotSinkCommit
      */
     @Override
     public List<PinotSinkGlobalCommittable> commit(List<PinotSinkGlobalCommittable> globalCommittables) throws IOException {
+        if (globalCommittables.isEmpty()) return Collections.emptyList();
+
         // List of failed global committables that can be retried later on
         List<PinotSinkGlobalCommittable> failedCommits = new ArrayList<>();
 
@@ -186,6 +185,7 @@ public class PinotSinkGlobalCommitter implements GlobalCommitter<PinotSinkCommit
             // Commit all segments in globalCommittable
             for (int sequenceId = 0; sequenceId < globalCommittable.getDataFilePaths().size(); sequenceId++) {
                 String dataFilePath = globalCommittable.getDataFilePaths().get(sequenceId);
+                LOG.warn(dataFilePath);
                 // Get segment names with increasing sequenceIds
                 String segmentName = getSegmentName(globalCommittable, sequenceId);
                 // Segment committer handling the whole commit process for a single segment
@@ -315,7 +315,7 @@ public class PinotSinkGlobalCommitter implements GlobalCommitter<PinotSinkCommit
      * Helper class for committing a single segment. Downloads a data file from the shared filesystem,
      * generates a segment from the data file and uploads segment to the Pinot controller.
      */
-    private static class SegmentCommitter implements Callable<Boolean> {
+    public static class SegmentCommitter implements Callable<Boolean> {
 
         private static final Logger LOG = LoggerFactory.getLogger(SegmentCommitter.class);
 
@@ -342,7 +342,7 @@ public class PinotSinkGlobalCommitter implements GlobalCommitter<PinotSinkCommit
          * @param timeColumnName      Name of the column containing the timestamp
          * @param segmentTimeUnit     Unit of the time column
          */
-        SegmentCommitter(String pinotControllerHost, String pinotControllerPort,
+        public SegmentCommitter(String pinotControllerHost, String pinotControllerPort,
                          File tempDirectory, FileSystemAdapter fsAdapter,
                          String dataFilePath, String segmentName, Schema tableSchema,
                          TableConfig tableConfig, String timeColumnName,

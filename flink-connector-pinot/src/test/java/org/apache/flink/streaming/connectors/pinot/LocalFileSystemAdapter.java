@@ -49,7 +49,8 @@ public class LocalFileSystemAdapter implements FileSystemAdapter {
      */
     @Override
     public String writeToSharedFileSystem(List<String> elements) throws IOException {
-        File tempDir = Files.createTempDirectory(tempDirPrefix).toFile();
+//        File tempDir = Files.createTempDirectory(tempDirPrefix).toFile();
+        File tempDir = new File(tempDirPrefix);
         return FileSystemUtils.writeToLocalFile(elements, tempDir).getAbsolutePath();
     }
 
@@ -74,6 +75,6 @@ public class LocalFileSystemAdapter implements FileSystemAdapter {
      */
     @Override
     public void deleteFromSharedFileSystem(String path) {
-        new File(path).delete();
+//        new File(path).delete();
     }
 }

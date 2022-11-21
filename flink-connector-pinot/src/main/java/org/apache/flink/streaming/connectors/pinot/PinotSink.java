@@ -91,7 +91,7 @@ import static org.apache.flink.util.Preconditions.checkNotNull;
  * {@link PinotSinkSegmentNameGenerator} which gets the minimum and maximum timestamp as input.
  * The segment generation starts with downloading the referenced data file from the shared file system
  * using the provided {@link FileSystemAdapter}. Once this is was completed, we use Pinot's
- * {@link SegmentIndexCreationDriver} to generate the final segment. Each segment is thereby stored
+ * {@link org.apache.pinot.core.segment.creator.SegmentIndexCreationDriver} to generate the final segment. Each segment is thereby stored
  * in a temporary directory on the local filesystem. Next, the segment is uploaded to the Pinot
  * controller using Pinot's {@link UploadSegmentCommand}.
  *

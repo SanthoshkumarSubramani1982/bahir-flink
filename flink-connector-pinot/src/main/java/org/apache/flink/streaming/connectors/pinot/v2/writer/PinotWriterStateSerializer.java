@@ -20,14 +20,13 @@ package org.apache.flink.streaming.connectors.pinot.v2.writer;
 
 import org.apache.flink.annotation.Internal;
 import org.apache.flink.core.io.SimpleVersionedSerializer;
-import org.apache.flink.streaming.connectors.pinot.writer.PinotSinkWriterState;
 
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Serializer for {@link PinotSinkWriterState}
+ * Serializer for {@link PinotWriterState}
  */
 @Internal
 public class PinotWriterStateSerializer implements SimpleVersionedSerializer<PinotWriterState> {

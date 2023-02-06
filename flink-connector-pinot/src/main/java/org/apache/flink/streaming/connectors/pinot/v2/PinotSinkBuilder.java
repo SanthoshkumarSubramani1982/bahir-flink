@@ -5,7 +5,6 @@ import org.apache.flink.streaming.connectors.pinot.segment.name.SimpleSegmentNam
 import org.apache.flink.streaming.connectors.pinot.v2.committer.PinotSinkCommitter;
 import org.apache.flink.streaming.connectors.pinot.v2.external.EventTimeExtractor;
 import org.apache.flink.streaming.connectors.pinot.v2.external.JsonSerializer;
-import org.apache.flink.streaming.connectors.pinot.writer.PinotSinkWriter;
 import org.apache.pinot.core.segment.name.SegmentNameGenerator;
 
 public class PinotSinkBuilder<IN> {
@@ -82,7 +81,7 @@ public class PinotSinkBuilder<IN> {
     }
 
     /**
-     * Defines the FileSystemAdapter used share data files between the {@link PinotSinkWriter} and
+     * Defines the FileSystemAdapter used share data files between the {@link org.apache.flink.streaming.connectors.pinot.v2.writer.PinotWriter} and
      * the {@link PinotSinkCommitter}.
      *
      * @param fsAdapter Adapter for interacting with the shared file system

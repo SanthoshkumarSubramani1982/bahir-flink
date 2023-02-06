@@ -20,7 +20,6 @@ package org.apache.flink.streaming.connectors.pinot.v2;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.databind.JsonNode;
-import org.apache.flink.streaming.connectors.pinot.PinotSink;
 import org.apache.flink.streaming.connectors.pinot.PinotTestHelper;
 import org.apache.flink.streaming.connectors.pinot.v2.external.JsonSerializer;
 import org.apache.flink.util.TestLogger;
@@ -35,6 +34,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.containers.wait.strategy.HttpWaitStrategy;
+import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
 import org.testcontainers.utility.DockerImageName;
 
@@ -50,7 +50,7 @@ public class PinotTestBase extends TestLogger {
     protected static final Logger LOG = LoggerFactory.getLogger(PinotTestBase.class);
 
     private static final String DOCKER_IMAGE_NAME = "apachepinot/pinot:0.6.0";
-    private static final Integer PINOT_INTERNAL_BROKER_PORT = 8000;
+    private static final Integer PINOT_INTERNAL_BROKER_PORT = 8099;
     private static final Integer PINOT_INTERNAL_CONTROLLER_PORT = 9000;
 
     protected static TableConfig TABLE_CONFIG;
@@ -61,7 +61,7 @@ public class PinotTestBase extends TestLogger {
      * Creates the Pinot testcontainer. We delay the start of tests until Pinot has started all
      * internal components. This is identified through a log statement.
      */
-//    @Container
+    @Container
     public static GenericContainer<?> pinot = new GenericContainer<>(DockerImageName.parse(DOCKER_IMAGE_NAME))
             .withCommand("QuickStart", "-type", "batch")
             .withExposedPorts(PINOT_INTERNAL_BROKER_PORT, PINOT_INTERNAL_CONTROLLER_PORT)
@@ -123,8 +123,7 @@ public class PinotTestBase extends TestLogger {
      * @return Pinot container host
      */
     protected String getPinotHost() {
-//        return pinot.getHost();
-        return "localhost";
+        return pinot.getHost();
     }
 
 
@@ -134,8 +133,7 @@ public class PinotTestBase extends TestLogger {
      * @return Pinot controller port
      */
     protected String getPinotControllerPort() {
-//        return pinot.getMappedPort(PINOT_INTERNAL_CONTROLLER_PORT).toString();
-        return "9000";
+        return pinot.getMappedPort(PINOT_INTERNAL_CONTROLLER_PORT).toString();
     }
 
     /**
@@ -144,8 +142,7 @@ public class PinotTestBase extends TestLogger {
      * @return Pinot broker port
      */
     private String getPinotBrokerPort() {
-//        return pinot.getMappedPort(PINOT_INTERNAL_BROKER_PORT).toString();
-        return "8099";
+        return pinot.getMappedPort(PINOT_INTERNAL_BROKER_PORT).toString();
     }
 
     /**

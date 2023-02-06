@@ -21,7 +21,6 @@ import org.apache.flink.annotation.Internal;
 import org.apache.flink.streaming.connectors.pinot.v2.committer.PinotSinkCommittable;
 import org.apache.flink.streaming.connectors.pinot.v2.external.JsonSerializer;
 import org.apache.flink.streaming.connectors.pinot.filesystem.FileSystemAdapter;
-import org.apache.flink.streaming.connectors.pinot.writer.PinotSinkWriterState;
 
 import java.io.IOException;
 import java.io.Serializable;

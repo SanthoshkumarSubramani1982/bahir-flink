@@ -1,15 +1,9 @@
 package org.apache.flink.streaming.connectors.pinot.v2;
 
-import org.apache.flink.api.common.functions.MapFunction;
 import org.apache.flink.api.connector.sink2.Sink;
 import org.apache.flink.api.connector.sink2.StatefulSink;
 import org.apache.flink.api.connector.sink2.TwoPhaseCommittingSink;
 import org.apache.flink.core.io.SimpleVersionedSerializer;
-import org.apache.flink.streaming.api.connector.sink2.CommittableMessage;
-import org.apache.flink.streaming.api.datastream.DataStream;
-import org.apache.flink.streaming.api.operators.OneInputStreamOperator;
-import org.apache.flink.streaming.api.operators.OneInputStreamOperatorFactory;
-import org.apache.flink.streaming.connectors.pinot.committer.PinotSinkGlobalCommitter;
 import org.apache.flink.streaming.connectors.pinot.filesystem.FileSystemAdapter;
 import org.apache.flink.streaming.connectors.pinot.v2.committer.PinotSinkCommittable;
 import org.apache.flink.streaming.connectors.pinot.v2.committer.PinotSinkCommittableSerializer;
@@ -20,7 +14,7 @@ import org.apache.flink.streaming.connectors.pinot.v2.writer.PinotWriter;
 import org.apache.flink.streaming.connectors.pinot.v2.writer.PinotWriterState;
 import org.apache.flink.streaming.connectors.pinot.v2.writer.PinotWriterStateSerializer;
 import org.apache.pinot.core.segment.name.SegmentNameGenerator;
-import org.apache.flink.streaming.api.connector.sink2.WithPreCommitTopology;
+
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
@@ -55,7 +49,7 @@ public class PinotSink<IN> implements
      * @param eventTimeExtractor   Defines the way event times are extracted from received objects
      * @param segmentNameGenerator Pinot segment name generator
      * @param fsAdapter            Filesystem adapter used to save files for sharing files across nodes
-     * @param numCommitThreads     Number of threads used in the {@link PinotSinkGlobalCommitter} for committing segments
+     * @param numCommitThreads     Number of threads used in the {@link PinotSinkCommitter} for committing segments
      */
     protected PinotSink(String pinotControllerHost, String pinotControllerPort, String tableName,
                       int maxRowsPerSegment, String tempDirPrefix, JsonSerializer<IN> jsonSerializer,

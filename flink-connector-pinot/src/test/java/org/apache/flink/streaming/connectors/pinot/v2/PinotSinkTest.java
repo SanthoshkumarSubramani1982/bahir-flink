@@ -57,7 +57,7 @@ class PinotSinkTest extends PinotTestBase {
     }
 
     /**
-     * Tests the BATCH execution of the {@link org.apache.flink.streaming.connectors.pinot.PinotSink}.
+     * Tests the BATCH execution of the {@link PinotSink}.
      *
      * @throws Exception
      */
@@ -66,7 +66,7 @@ class PinotSinkTest extends PinotTestBase {
         final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setRuntimeMode(RuntimeExecutionMode.BATCH);
         env.setRestartStrategy(RestartStrategies.noRestart());
-        env.setParallelism(1);
+        env.setParallelism(2);
 
         List<String> rawData = getRawTestData(12);
         DataStream<SingleColumnTableRow> dataStream = setupBatchDataSource(env, rawData);
@@ -80,7 +80,7 @@ class PinotSinkTest extends PinotTestBase {
     }
 
     /**
-     * Tests failure recovery of the {@link org.apache.flink.streaming.connectors.pinot.PinotSink} using BATCH execution mode.
+     * Tests failure recovery of the {@link PinotSink} using BATCH execution mode.
      *
      * @throws Exception
      */
@@ -89,7 +89,7 @@ class PinotSinkTest extends PinotTestBase {
         final StreamExecutionEnvironment env = StreamExecutionEnvironment.getExecutionEnvironment();
         env.setRuntimeMode(RuntimeExecutionMode.BATCH);
         env.setRestartStrategy(RestartStrategies.fixedDelayRestart(1, 10));
-        env.setParallelism(1);
+        env.setParallelism(2);
 
         List<String> rawData = getRawTestData(12);
         DataStream<SingleColumnTableRow> dataStream = setupBatchDataSource(env, rawData);
@@ -104,7 +104,7 @@ class PinotSinkTest extends PinotTestBase {
     }
 
     /**
-     * Tests the STREAMING execution of the {@link org.apache.flink.streaming.connectors.pinot.PinotSink}.
+     * Tests the STREAMING execution of the {@link PinotSink}.
      *
      * @throws Exception
      */
@@ -131,7 +131,7 @@ class PinotSinkTest extends PinotTestBase {
     }
 
     /**
-     * Tests failure recovery of the {@link org.apache.flink.streaming.connectors.pinot.PinotSink} using STREAMING execution mode.
+     * Tests failure recovery of the {@link PinotSink} using STREAMING execution mode.
      *
      * @throws Exception
      */
@@ -387,9 +387,9 @@ class PinotSinkTest extends PinotTestBase {
          * to Pinot by then, as we require {@link #failOnceAtNthElement} to be greater than
          * {@link #MAX_ROWS_PER_SEGMENT} (at a parallelism of 1). This allows to check whether the
          * snapshot creation and failure recovery in
-         * {@link org.apache.flink.streaming.connectors.pinot.writer.PinotSinkWriter} works properly,
+         * {@link org.apache.flink.streaming.connectors.pinot.v2.writer.PinotWriter} works properly,
          * respecting the already committed elements and those that are stored in an active
-         * {@link org.apache.flink.streaming.connectors.pinot.writer.PinotWriterSegment}. Committed
+         * {@link org.apache.flink.streaming.connectors.pinot.v2.writer.PinotWriterSegment}. Committed
          * elements must not be saved to the snapshot while those in an active segment must be saved
          * to the snapshot in order to enable later-on recovery.
          *
